@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<?xml-stylesheet type="text/xsl" href="format.xsl" ?>
+<ValidateRule>
+  <DuplicateDetection>
+    <Detector Name="PrimaryKey1">
+      <Field Name="學號"/>
+      <Field Name="索引分類"/>
+    </Detector>
+    <!-- 暫不提供匯入Key - 身分證號
+		<Detector Name="PrimaryKey2">
+			<Field Name="身分證號"/>
+			<Field Name="封存分類"/>
+		</Detector>
+    -->
+  </DuplicateDetection>
+  <FieldList>
+    <!-- 重要的鍵值內容-->
+    <Field Required="True" Name="學號" Description="此為學生必要鍵值(學號+索引分類不可重覆)">
+      <Validate AutoCorrect="False" Description="「學號」不允許空白。" ErrorType="Error" Validator="不可空白" When=""/>
+      <Validate AutoCorrect="False" Description="「學號」長度必須小於12個文字。" ErrorType="Error" Validator="文字12" When=""/>
+      <Validate AutoCorrect="False" Description="「學號」建議使用英文數字組合(不包含空白)。" ErrorType="Warning" Validator="多個英數字元" When=""/>
+    </Field>
+    <Field Required="True" Name="索引分類" Description="學號+索引分類不可重覆">
+      <Validate AutoCorrect="False" Description="「索引分類」不允許空白。" ErrorType="Error" Validator="不可空白" When=""/>
+    </Field>
+    <!-- 定義學生在學時期之資料-->
+    <Field Required="True" Name="畢業學年度" EmptyAlsoValidate="False" Description="學生的畢業學年度">
+      <Validate AutoCorrect="False" Description="「畢業學年度」必須是數字。" ErrorType="Error" Validator="Integer極限" When=""/>
+    </Field>
+    <Field Required="false" Name="畢業班級" EmptyAlsoValidate="False" Description="畢業班級是一個畫面上的分類資訊">
+    </Field>
+    <Field Required="false" Name="座號" EmptyAlsoValidate="False" Description="學生畢業時的座號">
+      <Validate AutoCorrect="False" Description="「座號」必須是數字。" ErrorType="Error" Validator="Integer極限" When="" />
+    </Field>
+    <Field Required="True" Name="姓名">
+      <Validate AutoCorrect="False" Description="「姓名」不允許空白。" ErrorType="Error" Validator="不可空白" When="" />
+      <Validate AutoCorrect="False" Description="「姓名」長度必須小於50個文字。" ErrorType="Error" Validator="文字50" When="" />
+    </Field>
+    <Field Required="false" Name="身分證號" EmptyAlsoValidate="False">
+      <Validate AutoCorrect="False" Description="「身分證號」長度必須小於20個文字。 " ErrorType="Error" Validator="文字20" When="" />
+    </Field>
+    <!-- 其他個人資料-->
+    <Field Required="True" Name="性別" EmptyAlsoValidate="False">
+      <Validate AutoCorrect="True" Description="「性別」只允許「男」與「女」。 " ErrorType="Error" Validator="性別列舉" When="" />
+    </Field>
+    <Field Required="false" Name="國籍" EmptyAlsoValidate="False">
+      <Validate AutoCorrect="False" Description="「國籍」長度必須小於30個文字。 " ErrorType="Error" Validator="文字30" When="" />
+    </Field>
+    <Field Required="false" Name="出生地" EmptyAlsoValidate="False">
+      <Validate AutoCorrect="False" Description="「出生地」長度必須小於30個文字。 " ErrorType="Error" Validator="文字30" When="" />
+    </Field>
+    <Field Required="false" Name="生日" EmptyAlsoValidate="False" Description="日期可使用之規格為&lt;br/&gt;96/8/8 (年/月/日)&lt;br/&gt;96-8-8 (年-月-日)&lt;br/&gt;960808 (年月日)&lt;br/&gt;2007-8-8 (年/月/日)&lt;br/&gt;8-8-2007 (月/日/年)&lt;br/&gt;20070812 (年月日)">
+      <Validate AutoCorrect="False" Description="「生日」格式不正確，建議使用西元「年/月/日」例如「2010/03/18」。" ErrorType="Warning" Validator="合法日期" When="" />
+    </Field>
+    <Field Required="false" Name="英文姓名" EmptyAlsoValidate="False">
+      <Validate AutoCorrect="False" Description="「英文姓名」長度必須小於50個文字。" ErrorType="Error" Validator="文字50" When="" />
+    </Field>
+    <Field Required="false" Name="戶籍電話" EmptyAlsoValidate="False">
+    </Field>
+    <Field Required="false" Name="聯絡電話" EmptyAlsoValidate="False">
+    </Field>
+    <Field Required="false" Name="手機" EmptyAlsoValidate="False">
+    </Field>
+    <Field Required="false" Name="其它電話1" EmptyAlsoValidate="False">
+    </Field>
+    <Field Required="false" Name="其它電話2" EmptyAlsoValidate="False">
+    </Field>
+    <Field Required="false" Name="其它電話3" EmptyAlsoValidate="False">
+    </Field>
+    <Field Required="False" Name="戶籍地址郵遞區號" EmptyAlsoValidate="False">
+      <Validate AutoCorrect="False" Description="「戶籍地址郵遞區號」必須是數字。" ErrorType="Error" Validator="Integer極限" When="" />
+    </Field>
+    <Field Required="False" Name="戶籍地址" EmptyAlsoValidate="False">
+    </Field>
+    <Field Required="False" Name="聯絡地址郵遞區號" EmptyAlsoValidate="False">
+      <Validate AutoCorrect="False" Description="「聯絡地址郵遞區號」必須是數字。" ErrorType="Error" Validator="Integer極限" When="" />
+    </Field>
+    <Field Required="False" Name="聯絡地址" EmptyAlsoValidate="False">
+    </Field>
+    <Field Required="False" Name="其它地址郵遞區號" EmptyAlsoValidate="False">
+      <Validate AutoCorrect="False" Description="「其它地址郵遞區號」必須是數字。" ErrorType="Error" Validator="Integer極限" When="" />
+    </Field>
+    <Field Required="False" Name="其它地址" EmptyAlsoValidate="False">
+    </Field>
+    <Field Required="False" Name="備註" EmptyAlsoValidate="False">
+    </Field>
+  </FieldList>
+  <ValidatorList>
+    <FieldValidator Name="文字12" Type="STRINGLENGTH">
+      <MinLength>0</MinLength>
+      <MaxLength>12</MaxLength>
+    </FieldValidator>
+    <FieldValidator Name="文字20" Type="STRINGLENGTH">
+      <MinLength>0</MinLength>
+      <MaxLength>20</MaxLength>
+    </FieldValidator>
+    <FieldValidator Name="文字30" Type="STRINGLENGTH">
+      <MinLength>0</MinLength>
+      <MaxLength>30</MaxLength>
+    </FieldValidator>
+    <FieldValidator Name="文字50" Type="STRINGLENGTH">
+      <MinLength>0</MinLength>
+      <MaxLength>50</MaxLength>
+    </FieldValidator>
+    <FieldValidator Name="文字100" Type="STRINGLENGTH">
+      <MinLength>0</MinLength>
+      <MaxLength>50</MaxLength>
+    </FieldValidator>
+    <FieldValidator Name="文字300" Type="STRINGLENGTH">
+      <MinLength>0</MinLength>
+      <MaxLength>50</MaxLength>
+    </FieldValidator>
+    <FieldValidator Name="不可空白" Type="STRINGLENGTH">
+      <MinLength>1</MinLength>
+    </FieldValidator>
+    <FieldValidator Name="Integer極限" Type="Integer">
+      <MinValue>1</MinValue>
+      <MaxValue>2000000000</MaxValue>
+    </FieldValidator>
+    <FieldValidator Name="學期列舉" Type="Enumeration">
+      <Item Value="1"/>
+      <Item Value="2"/>
+    </FieldValidator>
+    <FieldValidator Name="多個英數字元" Type="Regex">
+      <ValidPattern>
+        <![CDATA[^[A-Za-z0-9]+$]]>
+        <!-- 正規表示法 -->
+      </ValidPattern>
+    </FieldValidator>
+    <FieldValidator Name="性別列舉" Type="Enumeration">
+      <!--<Item Value="男"/>
+			<Item Value="女"/>-->
+      <Item Value="男">
+        <Variation>1</Variation>
+        <Variation>-1</Variation>
+        <Variation>t</Variation>
+        <Variation>true</Variation>
+        <Variation>M</Variation>
+        <Variation>m</Variation>
+      </Item>
+      <Item Value="女">
+        <Variation>0</Variation>
+        <Variation>f</Variation>
+        <Variation>F</Variation>
+        <Variation>false</Variation>
+      </Item>
+    </FieldValidator>
+    <FieldValidator Name="合法日期" Type="MixDate">
+      <!-- Gregorian | Taiwan-->
+      <!-- Pattern 中需要 Year,Month,Day 三個 Group。-->
+      <!-- 2007/8/8 (年/月/日) -->
+      <ValidPattern DateType="Gregorian">
+        <![CDATA[^(?<Year>[0-9]{4})/(?<Month>[0-9]{1,2})/(?<Day>[0-9]{1,2})$]]>
+      </ValidPattern>
+      <Matchs CorrectTo="yyyy/MM/dd">
+        <!-- 96/8/8 (年/月/日)-->
+        <Match DateType="Taiwan"><![CDATA[^(?<Year>1?[0-9]{2})/(?<Month>[0-9]{1,2})/(?<Day>[0-9]{1,2})$]]></Match>
+        <!-- 96-8-8 (年-月-日)-->
+        <Match DateType="Taiwan"><![CDATA[^(?<Year>1?[0-9]{2})-(?<Month>[0-9]{1,2})-(?<Day>[0-9]{1,2})$]]></Match>
+        <!-- 960808 (年月日)-->
+        <Match DateType="Taiwan"><![CDATA[^(?<Year>1?[0-9]{2})(?<Month>[0-9]{2})(?<Day>[0-9]{2})$]]></Match>
+        <!-- 2007-8-8 (年/月/日)-->
+        <Match DateType="Gregorian"><![CDATA[^(?<Year>[0-9]{4})-(?<Month>[0-9]{1,2})-(?<Day>[0-9]{1,2})$]]></Match>
+        <!-- 8-8-2007 (月/日/年)-->
+        <Match DateType="Gregorian"><![CDATA[^(?<Month>[0-9]{1,2})-(?<Day>[0-9]{1,2})-(?<Year>[0-9]{4})$]]></Match>
+        <!-- 20070812 (年月日)-->
+        <Match DateType="Gregorian"><![CDATA[^(?<Year>[0-9]{4})(?<Month>[0-9]{2})(?<Day>[0-9]{2})$]]></Match>
+      </Matchs>
+    </FieldValidator>
+    <!--動態添加XML驗證規則,標記區-->
+  </ValidatorList>
+
+  <RowValidate/>
+
+  <ConditionList/>
+</ValidateRule>

@@ -1,0 +1,398 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{00F02A28-D159-4B22-86EB-49CCD7B97E2C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>K12.Graduation.Modules</RootNamespace>
+    <AssemblyName>K12.Graduation.Modules</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Aspose.Cells, Version=4.4.0.0, Culture=neutral, PublicKeyToken=716fcc553a201e56">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Documents and Settings\Dylan.Huang\桌面\系統\FiscaAE高中開發\modules\Campus\Aspose.Cells.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Aspose.Pdf">
+      <HintPath>..\..\..\..\Documents and Settings\Dylan.Huang\桌面\系統\FiscaAE高中開發\modules\Campus\Aspose.Pdf.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Aspose.Words, Version=4.4.1.0, Culture=neutral, PublicKeyToken=716fcc553a201e56">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Documents and Settings\Dylan.Huang\桌面\系統\FiscaAE高中開發\modules\Campus\Aspose.Words.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Campus.Configuration">
+      <HintPath>..\..\..\..\Documents and Settings\Dylan.Huang\桌面\系統\FiscaAE高中開發\modules\Campus\Campus.Configuration.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Campus.DocumentValidator">
+      <HintPath>..\..\..\..\Documents and Settings\Dylan.Huang\桌面\系統\FiscaAE高中開發\modules\Campus\Campus.DocumentValidator.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Campus.Import">
+      <HintPath>..\..\..\..\Documents and Settings\Dylan.Huang\桌面\系統\FiscaAE高中開發\modules\Campus\Campus.Import.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Campus.Windows">
+      <HintPath>..\..\..\..\Documents and Settings\Dylan.Huang\桌面\系統\FiscaAE高中開發\modules\Campus\Campus.Windows.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DevComponents.DotNetBar2, Version=9.5.0.1, Culture=neutral, PublicKeyToken=7eb7c3a35b91de04, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Documents and Settings\Dylan.Huang\桌面\系統\FiscaAE高中開發\components\DevComponents.DotNetBar2.dll</HintPath>
+    </Reference>
+    <Reference Include="FISCA, Version=1.9.1.9, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ischool_Senior with FISCA\LibraryProject\FISCA.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="FISCA.Data">
+      <HintPath>..\..\ischool_Senior with FISCA\LibraryProject\FISCA.Data.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="FISCA.DSAUtil">
+      <HintPath>..\..\ischool_Junior with FISCA\LibraryProject\FISCA.DSAUtil.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="FISCA.LogAgent">
+      <HintPath>..\..\ischool_Senior with FISCA\LibraryProject\FISCA.LogAgent.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="FISCA.Permission, Version=1.0.0.7, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ischool_Senior with FISCA\LibraryProject\FISCA.Permission.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="FISCA.Presentation, Version=1.0.2.9, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ischool_Senior with FISCA\LibraryProject\FISCA.Presentation.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="FISCA.UDT, Version=1.0.2.2, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ischool_Senior with FISCA\LibraryProject\FISCA.UDT.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Framework">
+      <HintPath>..\..\ischool_Senior with FISCA\ischool\bin\Debug\Framework.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="IntelliSchool.DSA.ClientFramework">
+      <HintPath>..\..\ischool_Senior with FISCA\LibraryProject\IntelliSchool.DSA.ClientFramework.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="K12.Data">
+      <HintPath>..\..\ischool_Senior with FISCA\LibraryProject\K12.Data.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="K12.Presentation">
+      <HintPath>..\..\ischool_Senior with FISCA\LibraryProject\K12.Presentation.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="SmartSchool.API.PlugIn">
+      <HintPath>..\..\ischool_Senior with FISCA\LibraryProject\SmartSchool.API.PlugIn.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="SmartSchool.Common.DotNetBar">
+      <HintPath>..\..\ischool_Senior with FISCA\ischool\bin\Debug\SmartSchool.Common.DotNetBar.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="SmartSchool.Customization.Data">
+      <HintPath>..\..\ischool_Senior with FISCA\LibraryProject\SmartSchool.Customization.Data.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="SmartSchool.Customization.PlugIn">
+      <HintPath>..\..\ischool_Senior with FISCA\LibraryProject\SmartSchool.Customization.PlugIn.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="SmartSchool.ErrorReporting">
+      <HintPath>..\..\..\..\Documents and Settings\Dylan.Huang\桌面\系統\FiscaAE高中開發\modules\SHSchoolLoader_Beta\SmartSchool.ErrorReporting.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CategoryObj.cs" />
+    <Compile Include="DeleteAllData1.cs" />
+    <Compile Include="DeleteAllData2.cs" />
+    <Compile Include="FileCut\WordCut.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FileCut\WordCut.Designer.cs">
+      <DependentUpon>WordCut.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GraduateExtendControls\InformationItem.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GraduateExtendControls\InformationItem.Designer.cs">
+      <DependentUpon>InformationItem.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GraduateExtendControls\PhotoConvert.cs" />
+    <Compile Include="GraduateExtendControls\RemarksItem.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GraduateExtendControls\RemarksItem.Designer.cs">
+      <DependentUpon>RemarksItem.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GraduateExtendControls\RibbonBar\DownLoadWritlenInformation.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GraduateExtendControls\RibbonBar\DownLoadWritlenInformation.Designer.cs">
+      <DependentUpon>DownLoadWritlenInformation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GraduateExtendControls\RibbonBar\GetGraduationFrom.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GraduateExtendControls\RibbonBar\GetGraduationFrom.Designer.cs">
+      <DependentUpon>GetGraduationFrom.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ImportExport\CommentLogRobot.cs" />
+    <Compile Include="ImportExport\ExportGraduation.cs" />
+    <Compile Include="ImportExport\ExportStudentV2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ImportExport\ExportStudentV2.designer.cs">
+      <DependentUpon>ExportStudentV2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ImportExport\ImportGraduation.cs" />
+    <Compile Include="GraduateExtendControls\RibbonBar\UploadWrittenInformation.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GraduateExtendControls\RibbonBar\UploadWrittenInformation.Designer.cs">
+      <DependentUpon>UploadWrittenInformation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GraduateExtendControls\WrittenInfomationItem.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GraduateExtendControls\WrittenInfomationItem.Designer.cs">
+      <DependentUpon>WrittenInfomationItem.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GraduateExtendControls\XmlViewForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GraduateExtendControls\XmlViewForm.designer.cs">
+      <DependentUpon>XmlViewForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GraduationEvents.cs" />
+    <Compile Include="DetailContentBase.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DetailContentBase.designer.cs">
+      <DependentUpon>DetailContentBase.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SortStudent.cs" />
+    <Compile Include="StudentExtendControls\RibbonBar\GetText.cs" />
+    <Compile Include="StudentExtendControls\RibbonBar\ExtendMethod\Attendance_ExtendMethod.cs" />
+    <Compile Include="StudentExtendControls\RibbonBar\ExtendMethod\Discipline_ExtendMethod.cs" />
+    <Compile Include="StudentExtendControls\RibbonBar\ExtendMethod\GetAttendanceUDTXml.cs" />
+    <Compile Include="StudentExtendControls\RibbonBar\ExtendMethod\GetDisciplineUDTXml.cs" />
+    <Compile Include="StudentExtendControls\RibbonBar\ExtendMethod\GetUpdateRecordUDTXml.cs" />
+    <Compile Include="StudentExtendControls\RibbonBar\ExtendMethod\SemsMoralScore_ExtendMethod.cs" />
+    <Compile Include="StudentExtendControls\RibbonBar\GetUDTXml.cs" />
+    <Compile Include="StudentExtendControls\RibbonBar\Help\AddressHelp.cs" />
+    <Compile Include="StudentExtendControls\RibbonBar\Help\PhoneHelp.cs" />
+    <Compile Include="StudentExtendControls\RibbonBar\Help\PhotoRecordHelp.cs" />
+    <Compile Include="StudentExtendControls\RibbonBar\Help\TagHelp.cs" />
+    <Compile Include="StudentExtendControls\RibbonBar\Help\UpdateRecordHelp.cs" />
+    <Compile Include="StudentExtendControls\RibbonBar\ExtendMethod\Update_ExtendMethod.cs" />
+    <Compile Include="StudentExtendControls\RibbonBar\Help\XmlUdtHelp.cs" />
+    <Compile Include="StudentExtendControls\RibbonBar\ArchiveHelper.cs" />
+    <Compile Include="Tag\StudentDescription.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Tag\StudentDescription.Designer.cs">
+      <DependentUpon>StudentDescription.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Tn.cs" />
+    <Compile Include="UDT_S.cs" />
+    <Compile Include="UDT\PhotoDataUDT.cs" />
+    <Compile Include="ViewJPG.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ViewJPG.Designer.cs">
+      <DependentUpon>ViewJPG.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\ArchiveNoteView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="View\ArchiveNoteView.designer.cs">
+      <DependentUpon>ArchiveNoteView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\GraduationYearView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="View\GraduationYearView.designer.cs">
+      <DependentUpon>GraduationYearView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GraduationAdmin.cs" />
+    <Compile Include="GraduateExtendControls\GraduateDetailItem.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GraduateExtendControls\GraduateDetailItem.Designer.cs">
+      <DependentUpon>GraduateDetailItem.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GraduateExtendControls\StorageProjectsItem.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GraduateExtendControls\StorageProjectsItem.Designer.cs">
+      <DependentUpon>StorageProjectsItem.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Permissions.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="SchoolYearObj.cs" />
+    <Compile Include="StudentExtendControls\RibbonBar\BatchArchiveStudent.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StudentExtendControls\RibbonBar\BatchArchiveStudent.Designer.cs">
+      <DependentUpon>BatchArchiveStudent.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UDT\AllXMLDataUDT.cs" />
+    <Compile Include="UDT\GraduateUDT.cs" />
+    <Compile Include="UDT\WrittenInformationUDT.cs" />
+    <Compile Include="View\TagView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="View\TagView.Designer.cs">
+      <DependentUpon>TagView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\TagViewObj.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="FileCut\WordCut.resx">
+      <DependentUpon>WordCut.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GraduateExtendControls\InformationItem.resx">
+      <DependentUpon>InformationItem.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GraduateExtendControls\RemarksItem.resx">
+      <DependentUpon>RemarksItem.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GraduateExtendControls\RibbonBar\DownLoadWritlenInformation.resx">
+      <DependentUpon>DownLoadWritlenInformation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GraduateExtendControls\RibbonBar\GetGraduationFrom.resx">
+      <DependentUpon>GetGraduationFrom.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ImportExport\ExportStudentV2.resx">
+      <DependentUpon>ExportStudentV2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GraduateExtendControls\RibbonBar\UploadWrittenInformation.resx">
+      <DependentUpon>UploadWrittenInformation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GraduateExtendControls\WrittenInfomationItem.resx">
+      <DependentUpon>WrittenInfomationItem.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GraduateExtendControls\XmlViewForm.resx">
+      <DependentUpon>XmlViewForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Tag\StudentDescription.resx">
+      <DependentUpon>StudentDescription.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ViewJPG.resx">
+      <DependentUpon>ViewJPG.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\ArchiveNoteView.resx">
+      <DependentUpon>ArchiveNoteView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\GraduationYearView.resx">
+      <DependentUpon>GraduationYearView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GraduateExtendControls\GraduateDetailItem.resx">
+      <DependentUpon>GraduateDetailItem.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GraduateExtendControls\StorageProjectsItem.resx">
+      <DependentUpon>StorageProjectsItem.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StudentExtendControls\RibbonBar\BatchArchiveStudent.resx">
+      <DependentUpon>BatchArchiveStudent.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\notepad_zoom_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Report.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\系統歷程.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\匯入.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\匯出.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\cabinet_down_128.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\atm_lock_128.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ImportGradution.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\layers_zoom_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\cabinet_up_128.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\windows_64.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
