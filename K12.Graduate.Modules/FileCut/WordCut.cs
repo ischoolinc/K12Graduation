@@ -27,7 +27,7 @@ namespace K12.Graduation.Modules
         private void buttonX1_Click(object sender, EventArgs e)
         {
             OpenFileDialog ofd = new OpenFileDialog();
-            ofd.Title = "選擇自訂的缺曠通知單範本";
+            ofd.Title = "選擇檔案";
             ofd.Filter = "Word檔案 (*.doc)|*.doc";
             if (ofd.ShowDialog() == DialogResult.OK)
             {

@@ -10,11 +10,11 @@ using Aspose.Cells;
 using DevComponents.DotNetBar;
 using DevComponents.DotNetBar.Rendering;
 using FISCA.LogAgent;
-using Framework;
 using K12.Data;
 using SmartSchool.API.PlugIn;
 using SmartSchool.API.PlugIn.Export;
 using FISCA.UDT;
+using FISCA.Presentation.Controls;
 
 namespace K12.Graduation.Modules
 {
@@ -652,7 +652,7 @@ namespace K12.Graduation.Modules
                 }
                 catch (Exception ex)
                 {
-                    BugReporter.ReportException(ex, false);
+                    SmartSchool.ErrorReporting.ReportingService.ReportException(ex);
                 }
                 finally
                 {
