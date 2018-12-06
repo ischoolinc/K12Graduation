@@ -263,7 +263,7 @@ namespace K12.Graduation.Modules
         {
 
             StringBuilder sb = new StringBuilder();
-            sb.Append("書面上傳支援 (*.doc;*.xls;*.pdf;*.jpg;*.png;*.tiff)|*.doc;*.xls;*.pdf;*.jpg;*.png;*.tiff");
+            sb.Append("書面上傳支援 (*.docx;*.xlsx;*.doc;*.xls;*.pdf;*.jpg;*.png;*.tiff)|*.docx;*.xlsx;*.doc;*.xls;*.pdf;*.jpg;*.png;*.tiff");
             OpenFileDialog ofd = new OpenFileDialog();
             ofd.Title = "選擇上傳檔案";
             ofd.Filter = sb.ToString();

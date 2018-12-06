@@ -334,6 +334,10 @@ namespace K12.Graduation.Modules
         {
             switch (Path.GetExtension(FilePath).ToLower())
             {
+                case ".docx":
+                    return Create(FilePath);
+                case ".xlsx":
+                    return Create(FilePath);
                 case ".doc":
                     return Create(FilePath);
                 case ".xls":
@@ -345,7 +349,7 @@ namespace K12.Graduation.Modules
                 case ".pdf":
                     return Create(FilePath);
                 default:
-                    MsgBox.Show("未知的格式無法匯入!!\n(已知格式包含:doc,xls,jpg,tiff,pdf)");
+                    MsgBox.Show("未知的格式無法匯入!!\n(已知格式包含:docx,xlsx,doc,xls,jpg,tiff,pdf)");
                     return "";
             }
         }
@@ -370,6 +374,10 @@ namespace K12.Graduation.Modules
         {
             switch (Path.GetExtension(FilePath).ToLower())
             {
+                case ".docx":
+                    return true;
+                case ".xlsx":
+                    return true;
                 case ".doc":
                     return true;
                 case ".xls":
