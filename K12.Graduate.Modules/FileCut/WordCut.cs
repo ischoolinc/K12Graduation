@@ -28,11 +28,22 @@ namespace K12.Graduation.Modules
         {
             OpenFileDialog ofd = new OpenFileDialog();
             ofd.Title = "選擇檔案";
-            ofd.Filter = "Word檔案 (*.doc)|*.doc";
+            ofd.Filter = "Word檔案 (*.doc)|*.doc|Word檔案 (*.docx)|*.docx";
             if (ofd.ShowDialog() == DialogResult.OK)
             {
-                //開啟檔案
-                Document doc = new Document(ofd.FileName);
+
+                Document doc = new Document(); ;
+                try
+                {
+                    //開啟檔案
+                    doc = new Document(ofd.FileName);
+                }
+                catch
+                {
+                    MsgBox.Show("開啟檔案失敗，請確認該檔案是否在使用中。");
+                    return;                    
+                }
+                
                 //掃瞄每個頁面
                 int count = 1;
                 foreach (Section each in doc.Sections)
@@ -78,7 +89,7 @@ namespace K12.Graduation.Modules
                 idoc.Sections.Add(n);
 
                 string gg = Path.GetDirectoryName(FileName);
-                idoc.Save(gg + "\\" + GetText + ".doc");
+                idoc.Save(gg + "\\" + GetText + ".docx");
                 count++;
             }
             else
@@ -90,7 +101,7 @@ namespace K12.Graduation.Modules
                 idoc.Sections.Add(n);
 
                 string gg = Path.GetDirectoryName(FileName);
-                idoc.Save(gg + "\\" + "0000" + count + ".doc");
+                idoc.Save(gg + "\\" + "0000" + count + ".docx");
             }
         }
     }
