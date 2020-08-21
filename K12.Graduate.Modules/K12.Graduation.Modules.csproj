@@ -164,6 +164,18 @@
     <Compile Include="FileCut\WordCut.Designer.cs">
       <DependentUpon>WordCut.cs</DependentUpon>
     </Compile>
+    <Compile Include="GraduateExtendControls\Counseling\DownLoadCounseling.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GraduateExtendControls\Counseling\DownLoadCounseling.Designer.cs">
+      <DependentUpon>DownLoadCounseling.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GraduateExtendControls\Counseling\UploadCounseling.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GraduateExtendControls\Counseling\UploadCounseling.Designer.cs">
+      <DependentUpon>UploadCounseling.cs</DependentUpon>
+    </Compile>
     <Compile Include="GraduateExtendControls\InformationItem.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -188,6 +200,12 @@
     </Compile>
     <Compile Include="GraduateExtendControls\RibbonBar\GetGraduationFrom.Designer.cs">
       <DependentUpon>GetGraduationFrom.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GraduateExtendControls\WriteCounselingItem.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GraduateExtendControls\WriteCounselingItem.Designer.cs">
+      <DependentUpon>WriteCounselingItem.cs</DependentUpon>
     </Compile>
     <Compile Include="ImportExport\CommentLogRobot.cs" />
     <Compile Include="ImportExport\ExportGraduation.cs" />
@@ -247,6 +265,7 @@
       <DependentUpon>StudentDescription.cs</DependentUpon>
     </Compile>
     <Compile Include="Tn.cs" />
+    <Compile Include="UDT\WriteCounselingUDT.cs" />
     <Compile Include="UDT_S.cs" />
     <Compile Include="UDT\PhotoDataUDT.cs" />
     <Compile Include="ViewJPG.cs">
@@ -310,6 +329,12 @@
     <EmbeddedResource Include="FileCut\WordCut.resx">
       <DependentUpon>WordCut.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="GraduateExtendControls\Counseling\DownLoadCounseling.resx">
+      <DependentUpon>DownLoadCounseling.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GraduateExtendControls\Counseling\UploadCounseling.resx">
+      <DependentUpon>UploadCounseling.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GraduateExtendControls\InformationItem.resx">
       <DependentUpon>InformationItem.cs</DependentUpon>
     </EmbeddedResource>
@@ -321,6 +346,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GraduateExtendControls\RibbonBar\GetGraduationFrom.resx">
       <DependentUpon>GetGraduationFrom.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GraduateExtendControls\WriteCounselingItem.resx">
+      <DependentUpon>WriteCounselingItem.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ImportExport\ExportStudentV2.resx">
       <DependentUpon>ExportStudentV2.cs</DependentUpon>
@@ -450,6 +478,8 @@
     <Content Include="Library\SmartSchool.ErrorReporting.dll" />
     <Content Include="Library\SmartSchool.ErrorReporting.pdb" />
     <Content Include="Library\SmartSchool.ErrorReporting.xml" />
+    <None Include="Resources\new_cabinet_up_128.png" />
+    <None Include="Resources\new_cabinet_down_128.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

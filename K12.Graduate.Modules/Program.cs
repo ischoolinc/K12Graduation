@@ -26,7 +26,7 @@ namespace K12.Graduation.Modules
             ConfigData cd = K12.Data.School.Configuration["畢業生檔案檢索UDT載入設定"];
             bool checkClubUDT = false;
 
-            string name = "畢業生UDT是否已載入";
+            string name = "畢業生UDT是否已載入_20200821";
             //如果尚無設定值,預設為
             if (string.IsNullOrEmpty(cd[name]))
             {
@@ -43,7 +43,7 @@ namespace K12.Graduation.Modules
                 _accessHelper.Select<PhotoDataUDT>("UID = '00000'");
                 _accessHelper.Select<AllXMLDataUDT>("UID = '00000'");
                 _accessHelper.Select<WrittenInformationUDT>("UID = '00000'");
-
+                _accessHelper.Select<WriteCounselingUDT>("UID = '00000'");
                 cd[name] = "true";
                 cd.Save();
             }
@@ -67,6 +67,8 @@ namespace K12.Graduation.Modules
             GraduationAdmin.Instance.AddDetailBulider(new FISCA.Presentation.DetailBulider<GraduateDetailItem>());
             //書面資料
             GraduationAdmin.Instance.AddDetailBulider(new FISCA.Presentation.DetailBulider<WrittenInfomationItem>());
+            //書面資料(輔導)
+            GraduationAdmin.Instance.AddDetailBulider(new FISCA.Presentation.DetailBulider<WriteCounselingItem>());
             //連絡資料
             GraduationAdmin.Instance.AddDetailBulider(new FISCA.Presentation.DetailBulider<InformationItem>());
             //系統封存資料(XML)
@@ -147,19 +149,19 @@ namespace K12.Graduation.Modules
             };
 
             RibbonBarItem DownLoads = GraduationAdmin.Instance.RibbonBarItems["書面管理"];
-            DownLoads["上傳"].Size = RibbonBarButton.MenuButtonSize.Large;
-            DownLoads["上傳"].Image = Properties.Resources.cabinet_up_128;
-            DownLoads["上傳"]["上傳書面資料"].Enable = Permissions.上傳書面資料權限;
-            DownLoads["上傳"]["上傳書面資料"].Click += delegate
+            DownLoads["上傳書面"].Size = RibbonBarButton.MenuButtonSize.Large;
+            DownLoads["上傳書面"].Image = Properties.Resources.cabinet_up_128;
+            DownLoads["上傳書面"].Enable = Permissions.上傳書面資料權限;
+            DownLoads["上傳書面"].Click += delegate
             {
                 UploadWrittenInformation infDlg = new UploadWrittenInformation();
                 infDlg.ShowDialog();
             };
 
-            DownLoads["下載"].Size = RibbonBarButton.MenuButtonSize.Large;
-            DownLoads["下載"].Image = Properties.Resources.cabinet_down_128;
-            DownLoads["下載"]["下載書面資料"].Enable = Permissions.下載書面資料權限;
-            DownLoads["下載"]["下載書面資料"].Click += delegate
+            DownLoads["下載書面"].Size = RibbonBarButton.MenuButtonSize.Large;
+            DownLoads["下載書面"].Image = Properties.Resources.cabinet_down_128;
+            DownLoads["下載書面"].Enable = Permissions.下載書面資料權限;
+            DownLoads["下載書面"].Click += delegate
             {
                 if (GraduationAdmin.Instance.SelectedSource.Count > 0)
                 {
@@ -173,16 +175,45 @@ namespace K12.Graduation.Modules
 
             };
 
-            DownLoads["文件分割"].Image = Properties.Resources.windows_64;
-            DownLoads["文件分割"].Size = RibbonBarButton.MenuButtonSize.Large;
+            #endregion
+
+            //2020/8/21 - 輔導書面
+            RibbonBarItem DownLoadCounseling = GraduationAdmin.Instance.RibbonBarItems["書面管理(輔導)"];
+            DownLoadCounseling["上傳輔導書面"].Size = RibbonBarButton.MenuButtonSize.Large;
+            DownLoadCounseling["上傳輔導書面"].Image = Properties.Resources.new_cabinet_up_128;
+            DownLoadCounseling["上傳輔導書面"].Enable = Permissions.上傳書面資料輔導權限;
+            DownLoadCounseling["上傳輔導書面"].Click += delegate
+            {
+                UploadCounseling infDlg = new UploadCounseling();
+                infDlg.ShowDialog();
+            };
+
+            DownLoadCounseling["下載輔導書面"].Size = RibbonBarButton.MenuButtonSize.Large;
+            DownLoadCounseling["下載輔導書面"].Image = Properties.Resources.new_cabinet_down_128;
+            DownLoadCounseling["下載輔導書面"].Enable = Permissions.下載書面資料輔導權限;
+            DownLoadCounseling["下載輔導書面"].Click += delegate
+            {
+                if (GraduationAdmin.Instance.SelectedSource.Count > 0)
+                {
+                    DownLoadCounseling DownLoad = new DownLoadCounseling();
+                    DownLoad.ShowDialog();
+                }
+                else
+                {
+                    MsgBox.Show("請選擇學生。");
+                }
+
+            };
+
+            RibbonBarItem tools = GraduationAdmin.Instance.RibbonBarItems["工具"];
+            tools["文件分割"].Image = Properties.Resources.windows_64;
+            tools["文件分割"].Size = RibbonBarButton.MenuButtonSize.Large;
             //DownLoads["文件分割"]["Word文件"].Enable = Permissions.下載書面資料權限;
-            DownLoads["文件分割"]["Word文件"].Click += delegate
+            tools["文件分割"]["Word文件"].Click += delegate
             {
                 WordCut word = new WordCut();
                 word.ShowDialog();
             };
-
-            #endregion
 
             #region 右鍵
 
@@ -295,6 +326,7 @@ namespace K12.Graduation.Modules
             detail.Add(new DetailItemFeature(Permissions.基本資料, "基本資料"));
             detail.Add(new DetailItemFeature(Permissions.聯絡資訊, "聯絡資訊"));
             detail.Add(new DetailItemFeature(Permissions.書面檔案, "書面檔案"));
+            detail.Add(new DetailItemFeature(Permissions.書面檔案輔導, "書面檔案(輔導)"));
             //detail.Add(new DetailItemFeature(Permissions.系統封存, "系統封存"));
             detail.Add(new DetailItemFeature(Permissions.備註, "備註"));
 
@@ -303,8 +335,10 @@ namespace K12.Graduation.Modules
             detail.Add(new ReportFeature(Permissions.取得封存資料, "取得索引資料"));
             detail.Add(new ReportFeature(Permissions.匯出畢業生基本資料, "匯出畢業生基本資料"));
             detail.Add(new ReportFeature(Permissions.匯入畢業生基本資料, "匯入畢業生基本資料(新增)"));
-            detail.Add(new ReportFeature(Permissions.上傳書面資料, "上傳書面資料"));
-            detail.Add(new ReportFeature(Permissions.下載書面資料, "下載書面資料"));
+            detail.Add(new ReportFeature(Permissions.上傳書面資料, "上傳書面"));
+            detail.Add(new ReportFeature(Permissions.下載書面資料, "下載書面"));
+            detail.Add(new ReportFeature(Permissions.上傳書面資料輔導, "上傳輔導書面"));
+            detail.Add(new ReportFeature(Permissions.下載書面資料輔導, "下載輔導書面"));
 
             detail = RoleAclSource.Instance["畢業生檔案檢索"]["右鍵功能"];
             detail.Add(new ReportFeature(Permissions.更新畫面資料, "更新畫面資料"));

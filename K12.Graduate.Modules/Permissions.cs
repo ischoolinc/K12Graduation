@@ -10,6 +10,10 @@ namespace K12.Graduation.Modules
         public static string 基本資料 { get { return "K12.Graduation.Modules.GraduateDetailItem"; } }
         public static string 聯絡資訊 { get { return "K12.Graduation.Modules.InformationItem"; } }
         public static string 書面檔案 { get { return "K12.Graduation.Modules.WrittenInfomationItem"; } }
+
+        //2020/8/21 - 輔導專用
+        public static string 書面檔案輔導 { get { return "K12.Graduation.Modules.WriteCounselingItem"; } }
+
         public static string 系統封存 { get { return "K12.Graduation.Modules.StorageProjectsItem"; } }    
         public static string 備註 { get { return "K12.Graduation.Modules.RemarksItem"; } }
 
@@ -20,6 +24,9 @@ namespace K12.Graduation.Modules
 
         public static string 上傳書面資料 { get { return "K12.Graduation.Modules.UploadWrittenInformation"; } }
         public static string 下載書面資料 { get { return "K12.Graduation.Modules.DownLoadWritlenInformation"; } }
+
+        public static string 上傳書面資料輔導 { get { return "K12.Graduation.Modules.UploadCounseling"; } }
+        public static string 下載書面資料輔導 { get { return "K12.Graduation.Modules.DownLoadCounseling"; } }
 
         public static string 更新畫面資料 { get { return "K12.Graduation.Modules.Raise"; } }
         public static string 刪除選擇資料 { get { return "K12.Graduation.Modules.Delete"; } }
@@ -123,6 +130,22 @@ namespace K12.Graduation.Modules
             get
             {
                 return FISCA.Permission.UserAcl.Current[下載書面資料].Executable;
+            }
+        }
+
+        public static bool 上傳書面資料輔導權限
+        {
+            get
+            {
+                return FISCA.Permission.UserAcl.Current[上傳書面資料輔導].Executable;
+            }
+        }
+
+        public static bool 下載書面資料輔導權限
+        {
+            get
+            {
+                return FISCA.Permission.UserAcl.Current[下載書面資料輔導].Executable;
             }
         }
 
