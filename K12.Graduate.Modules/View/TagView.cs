@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -24,6 +24,9 @@ namespace K12.Graduation.Modules
         //以學生為單位
         private Dictionary<string, GraduateUDT> TestDic1 = new Dictionary<string, GraduateUDT>();
 
+        private BackgroundWorker _loadBGW = new BackgroundWorker();
+        private string[] _pendingSource = null;
+
         string NoTag = "未分類";
 
         public TagView()
@@ -32,31 +35,52 @@ namespace K12.Graduation.Modules
 
             NavText = "依學生類別檢視";
 
+            _loadBGW.WorkerSupportsCancellation = true;
+            _loadBGW.DoWork += new DoWorkEventHandler(LoadBGW_DoWork);
+            _loadBGW.RunWorkerCompleted += new RunWorkerCompletedEventHandler(LoadBGW_RunWorkerCompleted);
+
             SourceChanged += new EventHandler(TagView_SourceChanged);
         }
 
         void TagView_SourceChanged(object sender, EventArgs e)
         {
-            TagDic.Clear();
-            TestDic1.Clear();
-
-            List<GraduateUDT> TestList = new List<GraduateUDT>();
-            if (Source.Count() != 0)
+            string[] snapshot = Source.ToArray();
+            if (_loadBGW.IsBusy)
             {
-                List<string> list = new List<string>();
-                foreach (string each in Source)
-                {
-                    if (list.Contains(each))
-                        continue;
-                    list.Add(each);
-                }
-                //取得資料
-                TestList = _AccessHelper.Select<GraduateUDT>(UDT_S.PopOneCondition("UID", list));
+                _pendingSource = snapshot;
+                _loadBGW.CancelAsync();
+                return;
             }
-            //排序
-            TestList.Sort(SortClassName);
+            _pendingSource = null;
+            _loadBGW.RunWorkerAsync(snapshot);
+        }
 
-            foreach (GraduateUDT obj in TestList)
+        void LoadBGW_DoWork(object sender, DoWorkEventArgs e)
+        {
+            BackgroundWorker worker = (BackgroundWorker)sender;
+            string[] sourceArray = (string[])e.Argument;
+
+            var tagDic = new Dictionary<string, Dictionary<string, List<string>>>();
+            var testDic1 = new Dictionary<string, GraduateUDT>();
+
+            if (sourceArray.Length == 0)
+            {
+                e.Result = Tuple.Create(tagDic, testDic1);
+                return;
+            }
+
+            // Deduplicate source UIDs with O(1) HashSet
+            var uniqueList = new HashSet<string>(sourceArray).ToList();
+
+            if (worker.CancellationPending) { e.Cancel = true; return; }
+
+            List<GraduateUDT> testList = _AccessHelper.Select<GraduateUDT>(UDT_S.PopOneCondition("UID", uniqueList));
+
+            if (worker.CancellationPending) { e.Cancel = true; return; }
+
+            testList.Sort(SortClassName);
+
+            foreach (GraduateUDT obj in testList)
             {
                 #region 依學生類別
                 if (!string.IsNullOrEmpty(obj.Tag))
@@ -66,106 +90,104 @@ namespace K12.Graduation.Modules
                     {
                         string Prefix = xmlE.GetAttribute("Prefix");
                         string Name = xmlE.GetAttribute("Name");
-                        //第一層
-                        if (!TagDic.ContainsKey(Prefix))
-                            TagDic.Add(Prefix, new Dictionary<string, List<string>>());
-
-                        //第二層
-                        if (!TagDic[Prefix].ContainsKey(Name))
-                            TagDic[Prefix].Add(Name, new List<string>());
-
-                        TagDic[Prefix][Name].Add(obj.UID);
+                        if (!tagDic.ContainsKey(Prefix))
+                            tagDic.Add(Prefix, new Dictionary<string, List<string>>());
+                        if (!tagDic[Prefix].ContainsKey(Name))
+                            tagDic[Prefix].Add(Name, new List<string>());
+                        tagDic[Prefix][Name].Add(obj.UID);
                     }
                 }
                 else
-                {                    
-                    if (!TagDic.ContainsKey(NoTag))
-                        TagDic.Add(NoTag, new Dictionary<string, List<string>>());
-
-                    if (!TagDic[NoTag].ContainsKey(NoTag))
-                        TagDic[NoTag].Add(NoTag, new List<string>());
-
-                    TagDic[NoTag][NoTag].Add(obj.UID);
-                } 
+                {
+                    if (!tagDic.ContainsKey(NoTag))
+                        tagDic.Add(NoTag, new Dictionary<string, List<string>>());
+                    if (!tagDic[NoTag].ContainsKey(NoTag))
+                        tagDic[NoTag].Add(NoTag, new List<string>());
+                    tagDic[NoTag][NoTag].Add(obj.UID);
+                }
                 #endregion
 
                 #region 建立所有學生記錄
-                if (!TestDic1.ContainsKey(obj.UID))
-                {
-                    TestDic1.Add(obj.UID, obj);
-                }
+                if (!testDic1.ContainsKey(obj.UID))
+                    testDic1.Add(obj.UID, obj);
                 #endregion
             }
 
+            e.Result = Tuple.Create(tagDic, testDic1);
+        }
+
+        void LoadBGW_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if (e.Cancelled)
+            {
+                // SourceChanged fired again while loading; start the queued request
+                if (_pendingSource != null)
+                {
+                    string[] next = _pendingSource;
+                    _pendingSource = null;
+                    _loadBGW.RunWorkerAsync(next);
+                }
+                return;
+            }
+
+            var result = (Tuple<Dictionary<string, Dictionary<string, List<string>>>, Dictionary<string, GraduateUDT>>)e.Result;
+            TagDic = result.Item1;
+            TestDic1 = result.Item2;
+            BuildTree();
+        }
+
+        private void BuildTree()
+        {
+            advTree1.BeginUpdate();
             advTree1.Nodes.Clear();
 
             DevComponents.AdvTree.Node Node1 = new DevComponents.AdvTree.Node();
-            Node1.Text = "依學生類別(" + TestDic1.Count() + ")";
+            Node1.Text = "依學生類別(" + TestDic1.Count + ")";
             Node1.Tag = "All";
-            advTree1.Nodes.Add(Node1); //加入
+            advTree1.Nodes.Add(Node1);
 
-            foreach (string each in TagDic.Keys) //前置詞
+            foreach (string each in TagDic.Keys)
             {
                 if (each == NoTag)
                     continue;
 
                 if (!string.IsNullOrEmpty(each))
                 {
-                    List<string> list = new List<string>();
-                    foreach (string each2 in TagDic[each].Keys) //標籤名稱
-                    {
+                    // Use HashSet for O(1) deduplication
+                    var uniqueSet = new HashSet<string>();
+                    foreach (string each2 in TagDic[each].Keys)
                         foreach (string each3 in TagDic[each][each2])
-                        {
-                            if (list.Contains(each3))
-                                continue;
-
-                            list.Add(each3);
-                        }
-                    }
+                            uniqueSet.Add(each3);
 
                     DevComponents.AdvTree.Node Node2 = new DevComponents.AdvTree.Node();
-                    Node2.Text = each + "(" + list.Count + ")";
+                    Node2.Text = each + "(" + uniqueSet.Count + ")";
                     Node2.Tag = each;
-                    Node1.Nodes.Add(Node2); //加入
+                    Node1.Nodes.Add(Node2);
 
-                    foreach (string each2 in TagDic[each].Keys) //標籤名稱
+                    foreach (string each2 in TagDic[each].Keys)
                     {
                         TagViewObj obj = new TagViewObj(each, each2);
-
                         DevComponents.AdvTree.Node Node3 = new DevComponents.AdvTree.Node();
                         Node3.Text = each2 + "(" + TagDic[each][each2].Count + ")";
                         Node3.Tag = obj;
-                        Node2.Nodes.Add(Node3); //加入   
-
+                        Node2.Nodes.Add(Node3);
                     }
                 }
-                else //如果是未分群組
+                else
                 {
-                    List<string> list = new List<string>();
-                    foreach (string each2 in TagDic[each].Keys) //標籤名稱
-                    {
+                    // 未分群組
+                    var uniqueSet = new HashSet<string>();
+                    foreach (string each2 in TagDic[each].Keys)
                         foreach (string each3 in TagDic[each][each2])
-                        {
-                            if (list.Contains(each3))
-                                continue;
+                            uniqueSet.Add(each3);
 
-                            list.Add(each3);
-                        }
-                    }
-
-                    //DevComponents.AdvTree.Node Node2 = new DevComponents.AdvTree.Node();
-                    //Node2.Text = each + "(" + list.Count + ")";
-                    //Node2.Tag = each;
-                    //Node1.Nodes.Add(Node2); //加入
-
-                    foreach (string each2 in TagDic[each].Keys) //標籤名稱
+                    foreach (string each2 in TagDic[each].Keys)
                     {
                         TagViewObj obj = new TagViewObj(each, each2);
-
                         DevComponents.AdvTree.Node Node3 = new DevComponents.AdvTree.Node();
                         Node3.Text = each2 + "(" + TagDic[each][each2].Count + ")";
                         Node3.Tag = obj;
-                        Node1.Nodes.Add(Node3); //加入   
+                        Node1.Nodes.Add(Node3);
                     }
                 }
             }
@@ -177,46 +199,33 @@ namespace K12.Graduation.Modules
                     DevComponents.AdvTree.Node Node4 = new DevComponents.AdvTree.Node();
                     Node4.Text = NoTag + "(" + TagDic[NoTag][NoTag].Count + ")";
                     Node4.Tag = NoTag;
-                    Node1.Nodes.Add(Node4); //加入 
+                    Node1.Nodes.Add(Node4);
                 }
             }
-            
 
-            //List<string> _Source = TestList.Select(x => x.UID).ToList();
-            //SetListPaneSource(_Source, false, false);
+            advTree1.EndUpdate();
         }
 
         private void advTree1_NodeClick(object sender, DevComponents.AdvTree.TreeNodeMouseEventArgs e)
         {
-            //判斷是否有按Control,Shift
             bool SelectedAll = (Control.ModifierKeys & Keys.Control) == Keys.Control;
             bool AddToTemp = (Control.ModifierKeys & Keys.Shift) == Keys.Shift;
 
             if (e.Node.Tag is string)
             {
                 string tag = "" + e.Node.Tag;
-                if (TagDic.ContainsKey(tag)) //所有學生 or 班級名稱Node)
+                if (TagDic.ContainsKey(tag))
                 {
-                    List<string> list = new List<string>();
+                    // Use HashSet to deduplicate UIDs across sub-tags
+                    var uniqueSet = new HashSet<string>();
                     foreach (string each1 in TagDic[tag].Keys)
-                    {
-                        foreach(string each2 in TagDic[tag][each1])
-                        {
-                            if (list.Contains(each2))
-                                continue;
-
-                            list.Add(each2);
-                        }
-                    }
-                    SetListPaneSource(list, SelectedAll, AddToTemp);
-
+                        foreach (string each2 in TagDic[tag][each1])
+                            uniqueSet.Add(each2);
+                    SetListPaneSource(uniqueSet.ToList(), SelectedAll, AddToTemp);
                 }
-                else if (tag == NoTag) //未分類
+                else if (tag == NoTag)
                 {
-                    List<string> list = new List<string>();
-                    list = TagDic[NoTag][NoTag];
-                    SetListPaneSource(list, SelectedAll, AddToTemp);
-                    //星期一解決
+                    SetListPaneSource(TagDic[NoTag][NoTag], SelectedAll, AddToTemp);
                 }
                 else if (tag == "ALL")
                 {
@@ -224,29 +233,21 @@ namespace K12.Graduation.Modules
                 }
             }
             else if (e.Node.Tag is TagViewObj)
-            { //如果是特殊TagViewObj物件
-                List<string> list = new List<string>();
+            {
                 TagViewObj obj = (TagViewObj)e.Node.Tag;
                 foreach (string each1 in TagDic.Keys)
                 {
                     if (each1 != obj._Prefix)
                         continue;
-
                     foreach (string each2 in TagDic[each1].Keys)
                     {
                         if (each2 != obj._Name)
                             continue;
-                 
-                        list = TagDic[each1][each2];
-                        SetListPaneSource(list, SelectedAll, AddToTemp);
-                        
+                        SetListPaneSource(TagDic[each1][each2], SelectedAll, AddToTemp);
                     }
-                    
                 }
             }
         }
-
-
 
         private int SortClassName(GraduateUDT obj1, GraduateUDT obj2)
         {
@@ -256,7 +257,6 @@ namespace K12.Graduation.Modules
             string bbbb1 = obj2.ClassName.PadLeft(10, '0');
             string bbbb2 = obj2.SeatNo.HasValue ? obj2.SeatNo.Value.ToString().PadLeft(10, '0') : "0000000000";
             bbbb1 += bbbb2;
-
             return aaaa1.CompareTo(bbbb1);
         }
     }

@@ -41,6 +41,10 @@ namespace K12.Graduation.Modules
 
         private bool isbusy = false;
 
+        // Maximum number of graduate records loaded into memory per query.
+        // Prevents unbounded memory consumption for large archives.
+        private const int MaxGraduateLoadCount = 2000;
+
         public GraduationAdmin()
         {
             //卒業生檔案檢索
@@ -349,105 +353,36 @@ namespace K12.Graduation.Modules
         {
             refTestList(TestDic.Keys.ToList());
 
-            List<string> results = new List<string>();
+            // Single-pass search: compile Regex once, check all enabled fields per entry.
+            // Use HashSet<string> for O(1) dedup instead of List.Contains() O(n).
             Regex rx = new Regex(SearEvArgs.Condition, RegexOptions.IgnoreCase);
-            #region 姓名
-            if (SearchStudentName.Checked)
+            HashSet<string> resultSet = new HashSet<string>();
+
+            foreach (string each in TestDic.Keys)
             {
-                foreach (string each in TestDic.Keys)
-                {
-                    if (rx.Match(TestDic[each].Name).Success)
-                    {
-                        if (!results.Contains(each))
-                            results.Add(each);
-                    }
-                }
+                GraduateUDT g = TestDic[each];
+
+                if (SearchStudentName.Checked && rx.IsMatch(g.Name))
+                { resultSet.Add(each); continue; }
+
+                if (SearchStudentNumber.Checked && rx.IsMatch(g.StudentNumber))
+                { resultSet.Add(each); continue; }
+
+                if (SearchIDNumber.Checked && rx.IsMatch(g.IDNumber))
+                { resultSet.Add(each); continue; }
+
+                if (SearchClassName.Checked && rx.IsMatch(g.ClassName))
+                { resultSet.Add(each); continue; }
+
+                if (SearchAddress.Checked &&
+                    (rx.IsMatch(g.MailingAddress) || rx.IsMatch(g.PermanentAddress) || rx.IsMatch(g.OtherAddresses)))
+                { resultSet.Add(each); continue; }
+
+                if (SearchRemarks.Checked && rx.IsMatch(g.Remarks))
+                { resultSet.Add(each); continue; }
             }
-            #endregion
 
-            #region 學號
-            if (SearchStudentNumber.Checked)
-            {
-                foreach (string each in TestDic.Keys)
-                {
-                    if (rx.Match(TestDic[each].StudentNumber).Success)
-                    {
-                        if (!results.Contains(each))
-                            results.Add(each);
-                    }
-                }
-            }
-            #endregion
-
-            #region 身分證號
-            if (SearchIDNumber.Checked)
-            {
-                foreach (string each in TestDic.Keys)
-                {
-                    if (rx.Match(TestDic[each].IDNumber).Success)
-                    {
-                        if (!results.Contains(each))
-                            results.Add(each);
-                    }
-                }
-            }
-            #endregion
-
-            #region 畢業班級
-            if (SearchClassName.Checked)
-            {
-                foreach (string each in TestDic.Keys)
-                {
-                    if (rx.Match(TestDic[each].ClassName).Success)
-                    {
-                        if (!results.Contains(each))
-                            results.Add(each);
-                    }
-                }
-            }
-            #endregion
-
-            #region 地址
-            if (SearchAddress.Checked)
-            {
-                foreach (string each in TestDic.Keys)
-                {
-                    if (rx.Match(TestDic[each].MailingAddress).Success)
-                    {
-                        if (!results.Contains(each))
-                            results.Add(each);
-                    }
-
-                    if (rx.Match(TestDic[each].PermanentAddress).Success)
-                    {
-                        if (!results.Contains(each))
-                            results.Add(each);
-                    }
-
-                    if (rx.Match(TestDic[each].OtherAddresses).Success)
-                    {
-                        if (!results.Contains(each))
-                            results.Add(each);
-                    }
-                }
-            }
-            #endregion
-
-            #region 備註
-            if (SearchRemarks.Checked)
-            {
-                foreach (string each in TestDic.Keys)
-                {
-                    if (rx.Match(TestDic[each].Remarks).Success)
-                    {
-                        if (!results.Contains(each))
-                            results.Add(each);
-                    }
-                }
-            }
-            #endregion
-
-            SearEvArgs.Result.AddRange(results);
+            SearEvArgs.Result.AddRange(resultSet);
         }
 
         void BGW_DoWork(object sender, DoWorkEventArgs e)
@@ -468,7 +403,15 @@ namespace K12.Graduation.Modules
         {
             TestDic.Clear();
 
+            // Note: AccessHelper.Select<T>() does not support SQL LIMIT in the condition
+            // string — results are trimmed in application code after fetching.
             List<GraduateUDT> TestList = _AccessHelper.Select<GraduateUDT>("uid in ('" + string.Join("','", list) + "')");
+
+            // Enforce page size cap to prevent unbounded memory consumption
+            bool truncated = TestList.Count > MaxGraduateLoadCount;
+            if (truncated)
+                TestList = TestList.Take(MaxGraduateLoadCount).ToList();
+
             //TestList.Sort(SortClassName);
             foreach (GraduateUDT obj in TestList)
             {
@@ -477,6 +420,10 @@ namespace K12.Graduation.Modules
                     TestDic.Add(obj.UID, obj);
                 }
             }
+
+            if (truncated)
+                FISCA.Presentation.MotherForm.SetStatusBarMessage(
+                    string.Format("顯示前 {0} 筆資料，請縮小搜尋範圍以查看更多。", MaxGraduateLoadCount));
         }
 
         private int SortClassName(GraduateUDT obj1, GraduateUDT obj2)

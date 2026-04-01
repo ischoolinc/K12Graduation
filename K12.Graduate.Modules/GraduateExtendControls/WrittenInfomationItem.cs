@@ -58,12 +58,13 @@ namespace K12.Graduation.Modules
 
         void BGW_DoWork(object sender, DoWorkEventArgs e)
         {
-            //取得PrimaryKey的UDT資料
+            // Two queries are the minimum required here: the FISCA UDT API does not support
+            // cross-UDT JOINs, so GraduateUDT and WrittenInformationUDT must be fetched
+            // separately. Both run on the background thread (DoWork) to keep the UI thread unblocked.
             List<GraduateUDT> GraduateUDTList = _AccessHelper.Select<GraduateUDT>(string.Format("UID='{0}'", this.PrimaryKey));
             if (GraduateUDTList.Count == 1)
             {
                 _StudentUdt = GraduateUDTList[0];
-                //再得此UDT的相依UDT資料
                 List<WrittenInformationUDT> listUDT = _AccessHelper.Select<WrittenInformationUDT>(string.Format("RefUDT_ID='{0}'", GraduateUDTList[0].UID));
                 e.Result = listUDT;
             }
