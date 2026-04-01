@@ -43,7 +43,7 @@ namespace K12.Graduation.Modules
 
         public GraduationAdmin()
         {
-            //畢業生檔案檢索
+            //卒業生檔案檢索
             Group = "畢業";
 
             GraduationEvents.GraduationChanged += new EventHandler(GraduationEvents_GraduationChanged);
@@ -196,7 +196,38 @@ namespace K12.Graduation.Modules
             //SetFilterSource(FiltedSemester);
 
             #region 搜尋
-            Campus.Configuration.ConfigData cd = Campus.Configuration.Config.User["AssociationSearchOptionPreference"];
+
+            System.Threading.Tasks.Task.Run(() =>
+            {
+                try
+                {
+                    Campus.Configuration.ConfigData cd = Campus.Configuration.Config.User["AssociationSearchOptionPreference"];
+
+                    if (FISCA.Presentation.MotherForm.Form.InvokeRequired)
+                    {
+                        FISCA.Presentation.MotherForm.Form.Invoke(new Action(() =>
+                        {
+                            SetupSearchMenu(cd);
+                        }));
+                    }
+                    else
+                    {
+                        SetupSearchMenu(cd);
+                    }
+                }
+                catch (Exception ex)
+                {
+                   // Do nothing or handle quietly
+                }
+            });
+            
+            #endregion
+
+            this.Search += new EventHandler<SearchEventArgs>(GraduationAdmin_Search);
+        }
+
+        private void SetupSearchMenu(Campus.Configuration.ConfigData cd)
+        {
             SearchStudentName = SearchConditionMenu["姓名"];
             SearchStudentName.AutoCheckOnClick = true;
             SearchStudentName.AutoCollapseOnClick = false;
@@ -268,11 +299,6 @@ namespace K12.Graduation.Modules
                 async.DoWork += delegate(object sender, DoWorkEventArgs e) { (e.Argument as Campus.Configuration.ConfigData).Save(); };
                 async.RunWorkerAsync(cd);
             };
-
-            #endregion
-
-            this.Search += new EventHandler<SearchEventArgs>(GraduationAdmin_Search);
-
         }
 
         void Field2_CompareValue(object sender, CompareValueEventArgs e)

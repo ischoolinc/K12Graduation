@@ -23,32 +23,50 @@ namespace K12.Graduation.Modules
 
             #region 處理UDT Table沒有的問題
 
-            ConfigData cd = K12.Data.School.Configuration["畢業生檔案檢索UDT載入設定"];
-            bool checkClubUDT = false;
-
-            string name = "畢業生UDT是否已載入_20200821";
-            //如果尚無設定值,預設為
-            if (string.IsNullOrEmpty(cd[name]))
+            System.Threading.Tasks.Task.Run(() =>
             {
-                cd[name] = "false";
-            }
+                try
+                {
+                    ConfigData cd = K12.Data.School.Configuration["畢業生檔案檢索UDT載入設定"];
+                    bool checkClubUDT = false;
 
-            //檢查是否為布林
-            bool.TryParse(cd[name], out checkClubUDT);
+                    string name = "畢業生UDT是否已載入_20200821";
+                    //如果尚無設定值,預設為
+                    if (string.IsNullOrEmpty(cd[name]))
+                    {
+                        cd[name] = "false";
+                    }
 
-            if (!checkClubUDT)
-            {
-                AccessHelper _accessHelper = new AccessHelper();
-                _accessHelper.Select<GraduateUDT>("UID = '00000'");
-                _accessHelper.Select<PhotoDataUDT>("UID = '00000'");
-                _accessHelper.Select<AllXMLDataUDT>("UID = '00000'");
-                _accessHelper.Select<WrittenInformationUDT>("UID = '00000'");
-                _accessHelper.Select<WriteCounselingUDT>("UID = '00000'");
-                cd[name] = "true";
-                cd.Save();
-            }
+                    //檢查是否為布林
+                    bool.TryParse(cd[name], out checkClubUDT);
+
+                    if (!checkClubUDT)
+                    {
+                        AccessHelper _accessHelper = new AccessHelper();
+                        _accessHelper.Select<GraduateUDT>("UID = '00000'");
+                        _accessHelper.Select<PhotoDataUDT>("UID = '00000'");
+                        _accessHelper.Select<AllXMLDataUDT>("UID = '00000'");
+                        _accessHelper.Select<WrittenInformationUDT>("UID = '00000'");
+                        _accessHelper.Select<WriteCounselingUDT>("UID = '00000'");
+                        cd[name] = "true";
+                        cd.Save();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Log("[K12.Graduation.Modules] Check UDT Error: " + ex.Message);
+                }
+            });
 
             #endregion
+
+            // Defer initialization to Application.Idle
+            Application.Idle += InitGraduationAdmin;
+        }
+
+        static private void InitGraduationAdmin(object senderObj, EventArgs arg)
+        {
+            Application.Idle -= InitGraduationAdmin;
 
             //增加一個頁籤
             MotherForm.AddPanel(GraduationAdmin.Instance);
